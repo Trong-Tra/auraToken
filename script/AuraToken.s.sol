@@ -14,7 +14,7 @@ contract auraTokenScript is Script{
      */
     function run() public{
         vm.startBroadcast();
-        auraToken token = new auraToken("AuraToken", "AURA", 10000000);
+        auraToken token = new auraToken("AuraToken", "AURA", 10000000*10**18);
         console2.log("Aura Token deployed at: ", address(token));
         console2.log("Supply: ", token.totalSupply());
         vm.stopBroadcast();

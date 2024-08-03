@@ -17,7 +17,7 @@ contract AuraTest is Test{
      */
     function setUp() public {
         vm.prank(supplyOwner);
-        token = new auraToken("Aura token", "AURA", 10000000);
+        token = new auraToken("Aura token", "AURA", 10000000*10**18);
     }
 
     /**
@@ -45,6 +45,6 @@ contract AuraTest is Test{
      * @dev setup token supply
      */
     function test_Supply() public {
-        assertEq(token.totalSupply(), 10000000);
+        assertEq(token.totalSupply(), 10000000*10**18);
     }
 }
