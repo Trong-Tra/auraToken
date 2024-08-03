@@ -11,5 +11,14 @@ contract AuraTest is Test{
     address user1 = makeAddr("User1")
     address user2 = makeAddr("User2")
     error ERC20InvalidReceiver(address receiver);
-    
+
+    /**
+     * @dev setup test
+     */
+
+    function setUp() public {
+        vm.prank(supplyOwner)
+        token = new auraToken("Aura token", "AURA", 100000)
+    }
+
 }
