@@ -32,7 +32,9 @@ contract auraToken is ERC20 {
      */
     function _update(address sender, address recipient, uint256 amount) internal override{
         uint256 burnAmount = amount * BURN_PERCENTAGE / 1000; // this handle .1%
-        super._update(sender, recipient, amount);
+        uint256 transferAmount = amount - burnAmount; 
+
+        super._update(sender, recipient, transferAmount); // avoid infaltion at genesis
         super._update(sender, BURN_ADDRESS, burnAmount);
     }
 }
