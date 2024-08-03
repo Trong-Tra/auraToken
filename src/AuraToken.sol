@@ -7,7 +7,7 @@ contract auraToken is ERC20 {
     /**
      * @dev contract variables
      */
-    uint256 public constant BURN_PERCENTAGE = 1; // 0.1% || we will handle this in transfer function
+    uint256 public constant BURN_PERCENTAGE = 1; // 0.1% || we will handle this in update function
     address public constant BURN_ADDRESS = 0x86FC854bd2ADA85C398e8aA3085D1a5069Ba738D; // my dev address, you can change this to your appropriate burn adr
     /**
      * @dev init constructor
@@ -24,9 +24,15 @@ contract auraToken is ERC20 {
         _mint(msg.sender, mintedToken_);
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) internal override{
+    /**
+     * @dev this function handling burning after tx
+     * @param sender sender address
+     * @param recipient receiver address 
+     * @param amount send amount
+     */
+    function _update(address sender, address recipient, uint256 amount) internal override{
         uint256 burnAmount = amount * BURN_PERCENTAGE / 1000; // this handle .1%
-        super._transfer(sender, recipient, amount);
-        super._transfer(sender, BURN_ADDRESS, burnAmount);
+        super._update(sender, recipient, amount);
+        super._update(sender, BURN_ADDRESS, burnAmount);
     }
 }
