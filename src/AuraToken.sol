@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract auraToken is ERC20 {
     /**
      * @dev init constructor
-     *
      */
 
     constructor(
