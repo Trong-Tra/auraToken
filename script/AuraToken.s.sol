@@ -19,5 +19,4 @@ contract auraTokenScript is Script{
         console2.log("Supply: ", token.totalSupply());
         vm.stopBroadcast();
     }
-
 }
