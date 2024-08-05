@@ -48,7 +48,7 @@ contract RolexGMTMasterII is Ownable, ERC721 {
         );
         if (!success) revert TransferFailed();
 
-        _safeMint(owner(), 0);
+        _safeMint(msg.sender, 0);
         _minted = true;
     }
 
