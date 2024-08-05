@@ -51,4 +51,13 @@ contract RolexGMTMasterII is Ownable, ERC721 {
         _safeMint(owner(), 0);
         _minted = true;
     }
+
+    /**
+     * @dev this function allow contract deployer to withdraw from contract
+     */
+    function withdraw() public onlyOwner {
+        uint256 balance = paymentToken.balanceOf(address(this));
+        require(balance > 0, "no fund!");
+        paymentToken.transfer(owner(), balance);
+    }
 }
