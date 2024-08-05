@@ -12,6 +12,7 @@ contract RolexGMTMasterII is Ownable, ERC721 {
     error NFTAlreadyMinted();
     error InsufficientAllowance();
     error TransferFailed();
+    error NoFund();
 
     /**
      * @dev contract variables
@@ -57,7 +58,7 @@ contract RolexGMTMasterII is Ownable, ERC721 {
      */
     function withdraw() public onlyOwner {
         uint256 balance = paymentToken.balanceOf(address(this));
-        require(balance > 0, "no fund!");
+        if (balance == 0) revert NoFund();
         paymentToken.transfer(owner(), balance);
     }
 }
