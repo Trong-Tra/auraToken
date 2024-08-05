@@ -1,14 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract auraToken is ERC20 {
     /**
      * @dev contract variables
      */
     uint256 public constant BURN_PERCENTAGE = 1; // 0.1% || we will handle this in update function
-    address public constant BURN_ADDRESS = 0x86FC854bd2ADA85C398e8aA3085D1a5069Ba738D; // my dev address, you can change this to your appropriate burn adr
+    address public constant BURN_ADDRESS =
+        0x86FC854bd2ADA85C398e8aA3085D1a5069Ba738D; // my dev address, you can change this to your appropriate burn adr
+
     /**
      * @dev init constructor
      * @param name_ token name
@@ -27,12 +29,16 @@ contract auraToken is ERC20 {
     /**
      * @dev this function handling burning after tx
      * @param sender sender address
-     * @param recipient receiver address 
+     * @param recipient receiver address
      * @param amount send amount
      */
-    function _update(address sender, address recipient, uint256 amount) internal override{
-        uint256 burnAmount = amount * BURN_PERCENTAGE / 1000; // this handle .1%
-        uint256 transferAmount = amount - burnAmount; 
+    function _update(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal override {
+        uint256 burnAmount = (amount * BURN_PERCENTAGE) / 1000; // this handle .1%
+        uint256 transferAmount = amount - burnAmount;
 
         super._update(sender, recipient, transferAmount); // avoid infaltion at genesis
         super._update(sender, BURN_ADDRESS, burnAmount);
