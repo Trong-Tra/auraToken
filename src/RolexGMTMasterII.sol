@@ -13,31 +13,40 @@ contract RolexGMTMasterII is Ownable, ERC721 {
     error InsufficientAllowance();
     error TransferFailed();
     error NoFund();
+    error mintLimitReached();
 
     /**
      * @dev contract variables
      */
     IERC20 public paymentToken;
     uint256 public mint_price;
-    bool private _minted;
+    uint256 public supply;
+    uint256 public tokenID;
+
+    mapping(address => bool) private _minted;
 
     /**
      * @param _paymentToken payment token address
      * @param _mintPrice price to mint NFT
+     * @param _supply NFT supply
      */
     constructor(
         address _paymentToken,
-        uint256 _mintPrice
+        uint256 _mintPrice,
+        uint256 _supply
     ) ERC721("Rolex GMT-Master II", "") Ownable(msg.sender) {
         paymentToken = IERC20(_paymentToken);
         mint_price = _mintPrice;
+        supply = _supply;
+        tokenID = 0;
     }
 
     /**
      * @dev this function allow to mint NFT, restricted 1 NFT per address
      */
     function mint() public {
-        if (_minted) revert NFTAlreadyMinted();
+        if (supply <= 0) revert mintLimitReached();
+        if (_minted[msg.sender]) revert NFTAlreadyMinted();
 
         uint256 allowance = paymentToken.allowance(msg.sender, address(this));
         if (allowance < mint_price) revert InsufficientAllowance();
@@ -49,8 +58,10 @@ contract RolexGMTMasterII is Ownable, ERC721 {
         );
         if (!success) revert TransferFailed();
 
-        _safeMint(msg.sender, 0);
-        _minted = true;
+        _safeMint(msg.sender, tokenID);
+        supply--;
+        tokenID++;
+        _minted[msg.sender] = true;
     }
 
     /**
