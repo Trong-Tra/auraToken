@@ -20,6 +20,10 @@ contract RolexGMTMasterII is Ownable, ERC721 {
     uint256 public mint_price;
     bool private _minted;
 
+    /**
+     * @param _paymentToken payment token address
+     * @param _mintPrice price to mint NFT
+     */
     constructor(
         address _paymentToken,
         uint256 _mintPrice
@@ -29,9 +33,9 @@ contract RolexGMTMasterII is Ownable, ERC721 {
     }
 
     /**
-     * @dev function allow user to mint NFT, restricted 1 NFT per address
+     * @dev this function allow to mint NFT, restricted 1 NFT per address
      */
-    function mint() public onlyOwner returns (uint256) {
+    function mint() public {
         if (_minted) revert NFTAlreadyMinted();
 
         uint256 allowance = paymentToken.allowance(msg.sender, address(this));
@@ -46,6 +50,5 @@ contract RolexGMTMasterII is Ownable, ERC721 {
 
         _safeMint(owner(), 0);
         _minted = true;
-        return 0;
     }
 }
