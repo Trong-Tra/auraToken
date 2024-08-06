@@ -10,11 +10,14 @@ contract AuraStaking is Ownable {
      */
     error InvalidStakingAmount();
     error StakeFailed();
+    error NotStalked();
+    error UnstakeFailed();
 
     /**
      * @dev event
      */
     event staked(address staker, uint256 amount);
+    event unstaked(address staker, uint256 amount);
 
     /**
      * @dev contract variable
@@ -41,6 +44,11 @@ contract AuraStaking is Ownable {
         rewardRate = _rewardRate;
     }
 
+    /**
+     * @dev staking function
+     * @param stakeAmount staker staking amount
+     */
+
     function stake(uint256 stakeAmount) public {
         if (stakeAmount <= 0) revert InvalidStakingAmount();
 
@@ -49,7 +57,6 @@ contract AuraStaking is Ownable {
             address(this),
             stakeAmount
         );
-
         if (!success) revert StakeFailed();
 
         stakes[msg.sender].amount += stakeAmount;
@@ -57,5 +64,25 @@ contract AuraStaking is Ownable {
             stakes[msg.sender].stakeWen = block.timestamp;
 
         emit staked(msg.sender, stakes[msg.sender].amount);
+    }
+
+    /**
+     * @dev unstake function
+     * @notice fuunction will unstake all staked amount
+     */
+
+    function unstake() public {
+        if (stakes[msg.sender].amount <= 0) revert NotStalked();
+
+        bool success = stakingToken.transferFrom(
+            address(this),
+            msg.sender,
+            stakes[msg.sender].amount
+        );
+        if (!success) revert UnstakeFailed();
+
+        stakes[msg.sender].amount = 0;
+        stakes[msg.sender].stakeWen = 0;
+        emit unstaked(msg.sender, stakes[msg.sender].amount);
     }
 }
