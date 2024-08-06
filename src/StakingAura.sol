@@ -12,6 +12,11 @@ contract AuraStaking is Ownable {
     error StakeFailed();
 
     /**
+     * @dev event
+     */
+    event staked(address staker, uint256 amount);
+
+    /**
      * @dev contract variable
      */
 
@@ -50,5 +55,7 @@ contract AuraStaking is Ownable {
         stakes[msg.sender].amount += stakeAmount;
         if (stakes[msg.sender].stakeWen == 0)
             stakes[msg.sender].stakeWen = block.timestamp;
+
+        emit staked(msg.sender, stakes[msg.sender].amount);
     }
 }
