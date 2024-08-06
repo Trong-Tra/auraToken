@@ -73,5 +73,3 @@ contract RolexGMTMasterII is Ownable, ERC721 {
         paymentToken.transfer(owner(), balance);
     }
 }
-
-// helper command to check git pushing problem
